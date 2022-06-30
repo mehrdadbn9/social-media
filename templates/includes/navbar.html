@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'home:home' %}">Home</a>
     {% if request.user.is_authenticated %}
-    <a class="navbar-brand" href="{% url 'account:user_profile'  request.user.id%}">Profile</a>
+    <a  style="" class="navbar-brand" href="{% url 'account:user_profile'  request.user.id%}">Profile</a>
     <a class="navbar-brand" href="{% url 'account:user_logout' %}">Logout</a>
     {% else %}
     <a class="navbar-brand" href="{% url 'account:user_register' %}">Register</a>
@@ -35,7 +35,7 @@
 <!--          <a class="nav-link disabled">Disabled</a>-->
 <!--        </li>-->
 <!--      </ul>-->
-      <form class="d-flex" role="search">
+      <form style="alignment: right" class="d-flex" role="search">
         <input class="form-control  me-2" type="search" placeholder="Search" aria-label="Search"  >
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
