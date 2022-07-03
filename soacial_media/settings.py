@@ -138,4 +138,5 @@ EMAIL_HOST_USER = 'mehrdadbiukian@gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = 'sysxadlhdimssdzp'
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'Sample website'
+#Optional: Signature added
+DEFAULT_FROM_EMAIL = 'Social media Sample website'
