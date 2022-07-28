@@ -8,11 +8,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 
+
 class RegisterView(View):
     form_class = UserRegistrationForm
     template_name = 'account/register.html'
 
-# doesn't let get and post been activated if user is authenticated ,before get and post happen
+    # doesn't let get and post been activated if user is authenticated ,before get and post happen
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('home:home')
@@ -29,7 +30,7 @@ class RegisterView(View):
             User.objects.create_user(clean_d['username'], clean_d['email'], clean_d['password'])
             messages.success(request, 'registered successfully!!!', 'success')
             return redirect('home:home')
-        return render(request,  self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form})
 
 
 class LoginView(View):
@@ -82,4 +83,4 @@ class UserPasswordResetView(auth_views.PasswordResetView):
 
 
 class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
-	template_name = 'account/password_reset_done.html'
+    template_name = 'account/password_reset_done.html'
