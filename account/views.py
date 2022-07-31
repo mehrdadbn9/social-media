@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
+from .models import Relation
 
 
 class RegisterView(View):
@@ -73,6 +74,8 @@ class UserProfileView(LoginRequiredMixin, View):
 
     def get(self, request, user_id):
         user = get_object_or_404(pk=user_id)
+        posts = user.posts.all()
+
         return render(request, 'account/profile.html', {'user': user})
 
 
@@ -84,3 +87,27 @@ class UserPasswordResetView(auth_views.PasswordResetView):
 
 class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
     template_name = 'account/password_reset_done.html'
+
+
+class UserFollowView(LoginRequiredMixin, View):
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        relation = Relation.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            messages.error(request, 'you are already following this user', 'danger')
+        else:
+            Relation(from_user=request.user, to_user=user).save()
+            messages.success(request, 'you followed this user', 'success')
+        return redirect('account:user_profile', user.id)
+
+
+class UserUnfollowView(LoginRequiredMixin, View):
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        relation = Relation.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            relation.delete()
+            messages.success(request, 'you unfollowed this user', 'success')
+        else:
+            messages.error(request, 'you are not following this user', 'danger')
+        return redirect('account:user_profile', user.id)
