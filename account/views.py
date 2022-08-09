@@ -38,10 +38,15 @@ class LoginView(View):
     form_class = UserLoginForm
     template_name = 'account/login.html'
 
+    def setup(self, request, *args, **kwargs):
+        self.next = request.GET.get('next')
+        return super().setup(request, *args, **kwargs)
+
     def dispatch(self, request, *args, **kwargs):
         # doesn't let get and post been activated if user is authenticated ,before get and post happen
         if request.user.is_authenticated:
             return redirect('home:home')
+
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -56,6 +61,8 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'you logged in successfully', 'success')
+                if self.next:
+                    return redirect(self.next)
                 return redirect('home:home')
             messages.error(request, 'username or password is wrong', 'warning')
         return render(request, self.template_name, {'form': form})
